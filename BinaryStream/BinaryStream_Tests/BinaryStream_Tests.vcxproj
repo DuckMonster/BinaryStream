@@ -154,7 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="unittest1.cpp" />
+    <ClCompile Include="bstreamtests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BinaryStream\BinaryStream.vcxproj">
