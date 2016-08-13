@@ -17,7 +17,7 @@ public:
 
     // Read value from stream without advancing cursor
     template<typename T>
-    T                       peek( );
+    T                       peek( ) const;
 
     // Write operator
     template<typename T>
@@ -28,16 +28,21 @@ public:
     bstream&                operator>>( T& output );
 
     // Beginning of stream
-    const byte*             begin( ) const { return &buffer[0]; };
+    const byte*             begin( ) const { if (buffer.size( ) == 0) return nullptr; return &buffer[0]; };
     // Size of stream
     unsigned int            size( ) const { return buffer.size( ); };
+
+    void                    clear( );
+    void                    reset( );
+    size_t                  getCursor( ) const { return cursor; }
+    void                    setCursor( size_t pos );
 
 private:
     std::vector<byte>       buffer;
     size_t                  cursor	= 0;
 };
 
-///<summary>Write value into end of buffer.</summary>
+///<summary>Write value onto stream.</summary>
 template<typename T>
 inline void bstream::write( const T& value ) {
     // Resize the buffer
@@ -62,18 +67,21 @@ inline T bstream::read( ) {
 
 ///<summary>Read data from memory and convert it to type T, but don't advance cursor.</summary>
 template<typename T>
-inline T bstream::peek( ) {
-    // Pointer to memory
-    void*   ptr     = &buffer[cursor];
+inline T bstream::peek( ) const {
+    // Check if buffer is too small
+    if (cursor + sizeof( T ) > size( ))
+        throw std::exception( "Tried to read beyond stream size" );
 
-    // Convert to T*
-    T*      tPtr    = (T*)ptr;
+    // Create instance of T
+    T       value;
 
-    // Return value at adress
-    return *tPtr;
+    // Copy memory into value from the buffer
+    memcpy( &value, &buffer[cursor], sizeof( T ) );
+
+    return value;
 }
 
-///<summary>Write data into buffer.</summary>
+///<summary>Write data onto stream.</summary>
 template<typename T>
 inline bstream& bstream::operator<<( T& value ) {
     // Write into buffer
@@ -83,7 +91,7 @@ inline bstream& bstream::operator<<( T& value ) {
     return *this;
 }
 
-///<summary>Read data from buffer, and copy it into <code>output</code>, then advance cursor sizeof(T) bytes.</summary>
+///<summary>Read data from stream, and copy it into <code>output</code>, then advance cursor sizeof(T) bytes.</summary>
 template<typename T>
 inline bstream & bstream::operator>>( T & output ) {
     // Read value
@@ -94,4 +102,21 @@ inline bstream & bstream::operator>>( T & output ) {
 
     // Return reference to self
     return *this;
+}
+
+///<summary>Clear all data.</summary>
+inline void bstream::clear( ) {
+    buffer.clear( );
+    reset( );
+}
+
+///<summary>Reset cursor position to beginning of stream.</summary>
+inline void bstream::reset( ) { setCursor( 0 ); }
+
+///<summary>Set cursor to position in stream.</summary>
+inline void bstream::setCursor( size_t pos ) {
+    if (pos > size( ))
+        throw std::exception( "Tried to set cursor position beyond stream size" );
+
+    cursor = pos;
 }

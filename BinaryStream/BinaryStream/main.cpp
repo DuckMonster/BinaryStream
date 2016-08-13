@@ -4,7 +4,7 @@
 
 using namespace std;
 
-struct A {
+struct Foo {
     int a = 50;
     int b = 100;
 };
