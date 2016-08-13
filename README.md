@@ -2,7 +2,7 @@
 A binary stream class for C++, for parsing generic types out of a binary stream of data.
 
 ##Usage
-`
+```
 // Creating the stream
 bstream str;
 
@@ -11,4 +11,4 @@ str << a; // Writing int onto stream ( converting it to 4 bytes and saving it in
 
 int b;
 str >> b; // Reading int from stream ( reading the first 4 bytes in buffer and converting them to an int )
-`
+```
