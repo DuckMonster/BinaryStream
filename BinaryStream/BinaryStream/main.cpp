@@ -12,19 +12,24 @@ struct A {
 int main( ) {
 	bstream str;
 
-	str.write<int>( 50 );
-	str.write<char[7]>( "Hello!" );
-	str.write( A( ) );
+	int a = 150;
+	double d = 120.05;
 
-	cout << str.read<int>( );
-	cout << ", ";
-	
-	for (int i=0; i < 7; i++)
-		cout << str.read<char>( );
+	str << a << d;
+	// Read again
 
-	A foo = str.read<A>( );
+	int a2;
+	double d2;
 
-	cout << ", " << foo.a << ":" << foo.b;
+	str >> a2 >> d2;
+
+	cout << a2 << ", " << d2 << "\n";
+
+
+	const byte*		begin = str.begin( );
+	for (int i=0; i < str.size( ); i++) {
+		cout << *(begin + i);
+	}
 
 	return 0;
 }
