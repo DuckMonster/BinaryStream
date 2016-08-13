@@ -94,4 +94,12 @@ public:
 
         Assert::ExpectException<std::exception>( [&str] {str.setCursor( 9 ); }, L"No exception thrown when setting cursor to more than size (8)" );
     }
+
+    TEST_METHOD( ManyIntegers ) {
+        bstream str;
+
+        for (size_t i = 0; i < 0x00FFFFFF; i++) {
+            str << i;
+        }
+    }
 };
