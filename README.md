@@ -23,7 +23,9 @@ char c = 's';
 
 str << i << d << c;
 
-cout << str.read<int>() << "\n" << str.read<double>() << "\n" << str.read<char>() << "\n\n";
+cout << str.read<int>( ) << "\n";
+cout << str.read<double>( ) << "\n";
+cout << str.read<char>( ) << "\n\n";
 
 /*  Outputs:
  *  50025
@@ -31,7 +33,7 @@ cout << str.read<int>() << "\n" << str.read<double>() << "\n" << str.read<char>(
  *  s
  */
 
-str.setCursor(0);
+str.setCursor( 0 );
 
 int i2;
 double d2;
