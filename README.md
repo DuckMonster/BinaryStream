@@ -17,6 +17,7 @@ str << a;               // Write int to stream ( using << operator )
 ###Reading
 ```
 bstream str;
+
 int b;
 
 b   = str.peek<int>( );   // Read an int from stream without advancing pointer
