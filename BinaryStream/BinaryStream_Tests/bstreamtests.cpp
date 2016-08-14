@@ -1,6 +1,7 @@
 #include "CppUnitTest.h"
 #include "../BinaryStream/bstream.hpp"
 #include <functional>
+#include <sstream>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -98,8 +99,16 @@ public:
     TEST_METHOD( ManyIntegers ) {
         bstream str;
 
-        for (size_t i = 0; i < 0x00FFFFFF; i++) {
+        for (size_t i = 0; i < 0x000FFFFF; i++) {
             str << i;
+        }
+
+        for (size_t i = 0; i < 0x000FFFFF; i++) {
+            size_t o;
+
+            str >> o;
+
+            Assert::AreEqual<unsigned int>( i, o, L"Output value did not match input" );
         }
     }
 };
