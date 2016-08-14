@@ -99,11 +99,11 @@ public:
     TEST_METHOD( ManyIntegers ) {
         bstream str;
 
-        for (size_t i = 0; i < 0x000FFFFF; i++) {
+        for (size_t i = 0; i < 0x00000FFF; i++) {
             str << i;
         }
 
-        for (size_t i = 0; i < 0x000FFFFF; i++) {
+        for (size_t i = 0; i < 0x00000FFF; i++) {
             size_t o;
 
             str >> o;

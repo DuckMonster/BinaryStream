@@ -32,9 +32,16 @@ public:
     // Size of stream
     unsigned int            size( ) const { return buffer.size( ); };
 
+    // Clear all data
     void                    clear( );
+
+    // Reset cursor to position 0
     void                    reset( );
+
+    // Get cursor position
     size_t                  getCursor( ) const { return cursor; }
+
+    // Set cursor position
     void                    setCursor( size_t pos );
 
 private:
@@ -43,9 +50,7 @@ private:
 };
 
 ///<summary>Write value onto stream.</summary>
-template<typename T>
-inline void bstream::write( const T& value ) {
-    // Resize the buffer
+template<typename T> inline void bstream::write( const T& value ) {
     buffer.resize( size( ) + sizeof( T ) );
 
     // Copy memory from parameter onto the end of the buffer
@@ -53,26 +58,20 @@ inline void bstream::write( const T& value ) {
 }
 
 ///<summary>Read data from memory and convert it to type T, then advance cursor sizeof(T) bytes.</summary>
-template<typename T>
-inline T bstream::read( ) {
-    // Get value
+template<typename T> inline T bstream::read( ) {
+    // Get value at cursor and advance
     T value = peek<T>( );
-
-    // Advance cursor
     cursor += sizeof( T );
 
-    // Return value at adress
     return value;
 }
 
 ///<summary>Read data from memory and convert it to type T, but don't advance cursor.</summary>
-template<typename T>
-inline T bstream::peek( ) const {
+template<typename T> inline T bstream::peek( ) const {
     // Check if buffer is too small
     if (cursor + sizeof( T ) > size( ))
         throw std::exception( "Tried to read beyond stream size" );
 
-    // Create instance of T
     T       value;
 
     // Copy memory into value from the buffer
@@ -82,25 +81,19 @@ inline T bstream::peek( ) const {
 }
 
 ///<summary>Write data onto stream.</summary>
-template<typename T>
-inline bstream& bstream::operator<<( T& value ) {
-    // Write into buffer
+template<typename T> inline bstream& bstream::operator<<( T& value ) {
     write( value );
-
-    // Return reference to self
     return *this;
 }
 
 ///<summary>Read data from stream, and copy it into <code>output</code>, then advance cursor sizeof(T) bytes.</summary>
-template<typename T>
-inline bstream & bstream::operator>>( T & output ) {
+template<typename T> inline bstream & bstream::operator>>( T & output ) {
     // Read value
     T value = read<T>( );
 
     // Copy memory
     memcpy( &output, &value, sizeof( T ) );
 
-    // Return reference to self
     return *this;
 }
 
