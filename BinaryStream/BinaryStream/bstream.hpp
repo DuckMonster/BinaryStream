@@ -21,29 +21,23 @@ public:
     template<typename T>
     T                       peek( ) const;
 
-    // Write operator
     template<typename T>
     bstream&                operator<<( T& value );
 
-    // Read operator
     template<typename T>
     bstream&                operator>>( T& output );
 
-    // Beginning of stream
+    // Beginning of memory
     const byte*             begin( ) const { if (buffer.size( ) == 0) return nullptr; return &buffer[0]; };
-    // Size of stream
     unsigned int            size( ) const { return buffer.size( ); };
 
-    // Clear all data
     void                    clear( );
 
     // Reset cursor to position 0
     void                    reset( );
+    bool                    endOfStream( ) const { return cursor >= buffer.size( ); }
 
-    // Get cursor position
     size_t                  getCursor( ) const { return cursor; }
-
-    // Set cursor position
     void                    setCursor( size_t pos );
 
 private:
