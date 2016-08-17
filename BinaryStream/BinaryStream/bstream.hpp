@@ -6,10 +6,12 @@ typedef unsigned char byte;
 class bstream {
 public:
     bstream( ) { };
+    bstream( const void* const ptr, const size_t size );
 
     // Write value to stream
     template<typename T>
     void                    write( const T& value );
+    void                    write( const void* const ptr, const size_t size );
 
     // Read value from stream and advance cursor
     template<typename T>
@@ -49,12 +51,18 @@ private:
     size_t                  cursor	= 0;
 };
 
-///<summary>Write value onto stream.</summary>
-template<typename T> inline void bstream::write( const T& value ) {
-    buffer.resize( size( ) + sizeof( T ) );
+inline bstream::bstream( const void * const ptr, const size_t size ) {
+    write( ptr, size );
+}
 
-    // Copy memory from parameter onto the end of the buffer
-    memcpy( &buffer[size( ) - sizeof( T )], &value, sizeof( T ) );
+///<summary>Write value onto stream.</summary>
+template<typename T> inline void bstream::write( const T& value ) { write( &value, sizeof( T ) ); }
+///<summary>Write generic memory onto stream.</summary>
+inline void bstream::write( const void * const ptr, const size_t dataSize ) {
+    buffer.resize( size( ) + dataSize );
+
+    // Copy data from pointer onto the buffer
+    memcpy( &buffer[size( ) - dataSize], ptr, dataSize );
 }
 
 ///<summary>Read data from memory and convert it to type T, then advance cursor sizeof(T) bytes.</summary>
