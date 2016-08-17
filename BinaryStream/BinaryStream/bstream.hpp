@@ -22,7 +22,7 @@ public:
     T                       peek( ) const;
 
     template<typename T>
-    bstream&                operator<<( T& value );
+    bstream&                operator<<( const T& value );
 
     template<typename T>
     bstream&                operator>>( T& output );
@@ -38,7 +38,7 @@ public:
     bool                    endOfStream( ) const { return cursor >= buffer.size( ); }
 
     size_t                  getCursor( ) const { return cursor; }
-    void                    setCursor( size_t pos );
+    void                    setCursor( const size_t pos );
 
 private:
     std::vector<byte>       buffer;
@@ -83,7 +83,7 @@ template<typename T> inline T bstream::peek( ) const {
 }
 
 ///<summary>Write data onto stream.</summary>
-template<typename T> inline bstream& bstream::operator<<( T& value ) {
+template<typename T> inline bstream& bstream::operator<<( const T& value ) {
     write( value );
     return *this;
 }
@@ -109,7 +109,7 @@ inline void bstream::clear( ) {
 inline void bstream::reset( ) { setCursor( 0 ); }
 
 ///<summary>Set cursor to position in stream.</summary>
-inline void bstream::setCursor( size_t pos ) {
+inline void bstream::setCursor( const size_t pos ) {
     if (pos > size( ))
         throw std::exception( "Tried to set cursor position beyond stream size" );
 
