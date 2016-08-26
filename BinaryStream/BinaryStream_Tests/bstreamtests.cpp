@@ -37,7 +37,7 @@ public:
         Assert::AreEqual<unsigned int>( str.size( ), 4, L"bstream size is not 4 after writing" );
 
         // Check buffer content
-        const byte* ptr = str.begin( );
+        const char* ptr = str.begin( );
 
         if (ptr[0] != 1 || ptr[1] != 1 || ptr[2] != 0 || ptr[3] != 0)
             Assert::Fail( L"bstream content is not representative of int=257" );

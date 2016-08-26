@@ -1,8 +1,6 @@
 #pragma once
 #include <vector>
 
-typedef unsigned char byte;
-
 class bstream {
 public:
     bstream( ) { };
@@ -10,8 +8,8 @@ public:
 
     // Write value to stream
     template<typename T>
-    void                    write( const T& value );
-    void                    write( const void* const ptr, const size_t size );
+    bstream&                write( const T& value );
+    bstream&                write( const void* const ptr, const size_t size );
 
     // Read value from stream and advance cursor
     template<typename T>
@@ -28,7 +26,7 @@ public:
     bstream&                operator>>( T& output );
 
     // Beginning of memory
-    const byte*             begin( ) const { if (buffer.size( ) == 0) return nullptr; return &buffer[0]; };
+    const char*             begin( ) const { if (buffer.size( ) == 0) return nullptr; return &buffer[0]; };
     unsigned int            size( ) const { return buffer.size( ); };
 
     void                    clear( );
@@ -41,7 +39,7 @@ public:
     void                    setCursor( const size_t pos );
 
 private:
-    std::vector<byte>       buffer;
+    std::vector<char>       buffer;
     size_t                  cursor	= 0;
 };
 
@@ -50,13 +48,16 @@ inline bstream::bstream( const void * const ptr, const size_t size ) {
 }
 
 ///<summary>Write value onto stream.</summary>
-template<typename T> inline void bstream::write( const T& value ) { write( &value, sizeof( T ) ); }
+template<typename T> inline bstream& bstream::write( const T& value ) { return write( &value, sizeof( T ) ); }
 ///<summary>Write generic memory onto stream.</summary>
-inline void bstream::write( const void * const ptr, const size_t dataSize ) {
+inline bstream& bstream::write( const void * const ptr, const size_t dataSize ) {
     buffer.resize( size( ) + dataSize );
 
     // Copy data from pointer onto the buffer
     memcpy( &buffer[size( ) - dataSize], ptr, dataSize );
+
+    // return reference to this
+    return *this;
 }
 
 ///<summary>Read data from memory and convert it to type T, then advance cursor sizeof(T) bytes.</summary>
