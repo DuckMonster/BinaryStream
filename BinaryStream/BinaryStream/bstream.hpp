@@ -14,6 +14,7 @@ public:
     // Read value from stream and advance cursor
     template<typename T>
     T                       read( );
+	void					read( char* buffer, const size_t bytes );
 
     // Read value from stream without advancing cursor
     template<typename T>
@@ -58,6 +59,10 @@ inline bstream& bstream::write( const void * const ptr, const size_t dataSize ) 
 
     // return reference to this
     return *this;
+}
+
+inline void bstream::read( char * buffer, const size_t bytes ) {
+	memcpy( buffer, &buffer[cursor], bytes );
 }
 
 ///<summary>Read data from memory and convert it to type T, then advance cursor sizeof(T) bytes.</summary>
