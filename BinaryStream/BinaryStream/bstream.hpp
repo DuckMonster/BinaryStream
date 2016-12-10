@@ -61,8 +61,9 @@ inline bstream& bstream::write( const void * const ptr, const size_t dataSize ) 
     return *this;
 }
 
-inline void bstream::read( char * buffer, const size_t bytes ) {
-	memcpy( buffer, &buffer[cursor], bytes );
+inline void bstream::read( char* outBuffer, const size_t bytes ) {
+	memcpy( outBuffer, &buffer[cursor], bytes );
+	cursor += bytes;
 }
 
 ///<summary>Read data from memory and convert it to type T, then advance cursor sizeof(T) bytes.</summary>
